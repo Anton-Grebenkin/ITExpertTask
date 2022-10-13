@@ -2,6 +2,7 @@ using ITExpertTask.Data;
 using ITExpertTask.Middleware;
 using ITExpertTask.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
 
@@ -20,9 +21,9 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 builder.Services.AddSwaggerGen();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<DataContext>(c => c.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ITExpertTask;Trusted_Connection=True;"));
+builder.Services.AddDbContext<DataContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IItemService, ItemService>();
-builder.Services.AddScoped<IDataContextProvider>(x => new DataContextProvider(@"Server=(localdb)\mssqllocaldb;Database=ITExpertTask;Trusted_Connection=True;"));
+builder.Services.AddScoped<IDataContextProvider>(x => new DataContextProvider(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
